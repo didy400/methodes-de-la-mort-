@@ -8,7 +8,9 @@ PRICES  = ["$6558.07", "$468.95", "$0.487526", "$762.84", "$8.86", "$85.26", "$0
 
 PRICES.each do |value|
     value[0] = ""
+    
 end
+PRICES.map!{|str| str.to_f}
 
 
 
@@ -19,7 +21,7 @@ end
 def devise_value #associe les devises et les valeurs dans un seul et même hash
     my_hash = {}
     my_hash = Hash[CRYPTOCURRENCY.zip(PRICES)]
-    PRICES.map!{|str| str.to_f}
+   
     return my_hash
     
 end 
@@ -27,30 +29,47 @@ end
 
 
 def most_value(my_hash) #la devise avec la plus grosse valeur
-    my_hash.each { |k, v| puts k, v if v == my_hash.values.max }
+    my_hash= devise_value
+    puts "devise la plus grande " + my_hash.key(my_hash.values.max) 
+   puts "= #{my_hash.values.max} $"
+end
+
+
+
+
+def low_value(my_hash) # la devise avec la plus petite valeur 
+    my_hash= devise_value
+    puts "devise la plus petite " + my_hash.key(my_hash.values.min)
+    puts "= #{my_hash.values.min} $"
+end
+
+
+def number_coin(my_hash) #le nombre de devises avec le mot "coin"
+    my_hash= devise_value
+    puts "Il y a #{my_hash.select{ |i| [/crypto/] }.length} crypto currencies contenant le mot clé"
+end
+
+def devise_under_6000(my_hash) #les devises avec une valeur en dessou de 6000
+    my_hash= devise_value
+    puts "Les devises, dont le cours est inférieur à 6000 sont :"
+    puts my_hash_lessen_than_6000 = my_hash.select{|k,v| v < 6000}
+    return my_hash_lessen_than_6000
 end 
 
-end
-most_value
 
-
-
-def low_value # la devise avec la plus petite valeur 
-
-end
-
-def number_coin #le nombre de devises avec le mot "coin"
-
-end
-
-def  devise_under_6000 #les devises avec une valeur en dessou de 6000
-
-end 
-
-def most_in_6000 #la devise la plus haut parmis celles en dessou de 6000
-
+def most_in_6000(my_hash_lessen_than_6000) #la devise la plus haut parmis celles en dessou de 6000
+    my_hash= devise_value
+    my_hash_lessen_than_6000 = devise_under_6000(my_hash)
+    puts "Parmis les devises inférieur , dont le cours est inférieur à 6000, la plus chère est :"
+    puts "#{my_hash_lessen_than_6000.key(my_hash_lessen_than_6000.values.max)}"
 end
 
 def perform 
-
+    my_hash= devise_value
+    my_hash_lessen_than_6000 = devise_under_6000(my_hash)
+    most_value(my_hash)
+    low_value(my_hash)
+    devise_under_6000(my_hash)
+    most_in_6000(my_hash)
 end 
+perform
